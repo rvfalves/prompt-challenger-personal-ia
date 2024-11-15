@@ -1,6 +1,6 @@
 # Desafio de projeto
 
-O desafio consistia em criar um assistente de delivery usando AWS step functions com Bedrock. A fim de conectar com o desafio anterior do personal trainer IA, solicitei sugestões de comida, bebida e sobremesa saudáveis. Utilizei o modelo de IA Titan Text G1 - Express da Bedrock. O input e o output do último bloco são os códigos abaixo em json.
+O desafio consistia em criar um assistente de delivery usando AWS step functions com Bedrock. A fim de conectar com o desafio anterior do personal trainer IA, solicitei sugestões de comida, bebida e sobremesa saudáveis. O código ALS (Amazon States Language), baseado em json, da solução encontra-se no arquivo codigo.json desta pasta. Utilizei o modelo de IA Titan Text G1 - Express da Bedrock. O input e o output do último bloco são os códigos abaixo em json.
 
 <p align="center">
     <img width="900px" src="./step_functions_execution.png">
