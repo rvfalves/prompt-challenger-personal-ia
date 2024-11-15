@@ -1,0 +1,87 @@
+{
+  "Comment": "An example of using Bedrock to chain prompts and their responses together.",
+  "StartAt": "Invoke model with first prompt",
+  "States": {
+    "Invoke model with first prompt": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::bedrock:invokeModel",
+      "Parameters": {
+        "ModelId": "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-text-express-v1",
+        "Body": {
+          "inputText": "Estou buscando hábitos mais saudáveis, planejando exercícios físicos e agora desejo uma alimentação mais saudável. Poderia me sugerir 3 opções de pratos saudáveis que posso pedir por delivery?",
+          "textGenerationConfig": {
+            "temperature": 0,
+            "topP": 1,
+            "maxTokenCount": 1000
+          }
+        },
+        "ContentType": "application/json",
+        "Accept": "*/*"
+      },
+      "Next": "Add first result to conversation history",
+      "ResultPath": "$.result_one",
+      "ResultSelector": {
+        "result_one.$": "$.Body.results[0].outputText"
+      }
+    },
+    "Add first result to conversation history": {
+      "Type": "Pass",
+      "Next": "Invoke model with second prompt",
+      "Parameters": {
+        "convo_one.$": "States.Format('{}\n{}', $.prompt_one, $.result_one.result_one)"
+      },
+      "ResultPath": "$.convo_one"
+    },
+    "Invoke model with second prompt": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::bedrock:invokeModel",
+      "Parameters": {
+        "ModelId": "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-text-express-v1",
+        "Body": {
+          "inputText": "Gostaria de indicações de bebidas saudáveis para acompanhar os pratos que sugeriu.",
+          "textGenerationConfig": {
+            "temperature": 0,
+            "topP": 1,
+            "maxTokenCount": 1000
+          }
+        },
+        "ContentType": "application/json",
+        "Accept": "*/*"
+      },
+      "Next": "Add second result to conversation history",
+      "ResultSelector": {
+        "result_two.$": "$.Body.results[0].outputText"
+      },
+      "ResultPath": "$.result_two"
+    },
+    "Add second result to conversation history": {
+      "Type": "Pass",
+      "Next": "Invoke model with third prompt",
+      "Parameters": {
+        "convo_two.$": "States.Format('{}\n{}\n{}', $.convo_one.convo_one, $.prompt_two, $.result_two.result_two)"
+      },
+      "ResultPath": "$.convo_two"
+    },
+    "Invoke model with third prompt": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::bedrock:invokeModel",
+      "Parameters": {
+        "ModelId": "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-text-express-v1",
+        "Body": {
+          "inputText": "Como não sou de ferro, gostaria de sugestões de sobremesa para acompanhar cada prato, preferencialmente que não sejam muito calóricas.",
+          "textGenerationConfig": {
+            "temperature": 0,
+            "topP": 1,
+            "maxTokenCount": 1000
+          }
+        },
+        "ContentType": "application/json",
+        "Accept": "*/*"
+      },
+      "End": true,
+      "ResultSelector": {
+        "result_three.$": "$.Body.results[0].outputText"
+      }
+    }
+  }
+}
