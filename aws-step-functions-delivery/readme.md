@@ -2,6 +2,11 @@
 
 O desafio consistia em criar um assistente de delivery usando AWS step functions com Bedrock. A fim de conectar com o desafio anterior do personal trainer IA, solicitei sugestões de comida, bebida e sobremesa saudáveis. Utilizei o modelo de IA Titan Text G1 - Express da Bedrock. O input e o output do último bloco são os códigos abaixo em json.
 
+<p align="center">
+    <img width="900px" src="./step_functions_execution.png">
+</p>
+
+
 ## INPUT do último bloco de execução:
 
 {  
